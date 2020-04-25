@@ -15,63 +15,67 @@
       BuzzNum:
       <input id="buzzNum" type="buzzNum">
       <br>
-      <input type="button" value="実行" onclick="OnButtonClick();">
+      <input id="doFizzBuzz" type="button" value="実行">
     </div>
     <h3>【実行結果】</h3>
     <div id="outputArea"></div>
   </body>
 
   <script>
-    <!-- ボタン押下動作 -->
-    function OnButtonClick() {
-      var fizzNum = document.getElementById("fizzNum").value;
-      var buzzNum = document.getElementById("buzzNum").value;
+    <!-- 取得するボタン -->
+    const fizzBuzzBtn = document.getElementById('doFizzBuzz');
 
-      <!-- 追加先の要素を指定する -->
-      var addDiv = document.getElementById("outputArea");
+    <!-- 追加先の要素を指定する -->
+      const addDiv = document.getElementById("outputArea");
+
+    <!-- ボタン押下動作 -->
+    fizzBuzzBtn.addEventListener('click', function() {
+      const fizzNum = document.getElementById("fizzNum").value;
+      const buzzNum = document.getElementById("buzzNum").value;
+
 
       <!-- 前回の実行結果がある場合、削除する -->
       if (addDiv.hasChildNodes()){
         DeleteOutputArea(addDiv);
       }
 
-      <!-- 入力判定(エラーはそのまま出力する) -->
+      <!-- 入力判定(エラーの場合、errTextを設定する) -->
+      let errText;
       if (fizzNum.trim() == "") {
-        text = document.createTextNode("FizzNumが空欄です");
-        addDiv.appendChild(text);
+        errText = document.createTextNode("FizzNumが空欄です");
       } else if(buzzNum.trim() == ""){
-        text = document.createTextNode("BuzzNumが空欄です");
-        addDiv.appendChild(text);
+        errText = document.createTextNode("BuzzNumが空欄です");
       } else if(fizzNum == 0 || buzzNum == 0){
-        text = document.createTextNode("0が入力されているので、他の値を設定してください");
-        addDiv.appendChild(text);
+        errText = document.createTextNode("0が入力されているので、他の値を設定してください");
       } else if(!isNaN(fizzNum) && !isNaN(buzzNum)){
         DrawOutputArea(addDiv, fizzNum, buzzNum);
       } else {
-        text = document.createTextNode("文字列が入力されています");
-        addDiv.appendChild(text);
+        errText = document.createTextNode("文字列が入力されています");
       }
-    }
+
+      <!-- errTextに設定がある場合、結果出力 -->
+      if (errText != undefined) {
+        addDiv.appendChild(errText);
+      }
+    }, false);
 
     <!-- 実効結果出力(正常系) -->
     function DrawOutputArea(addDiv, fizzNum, buzzNum) {
-      var count = 1;
-      while (count < 100) {
-        var text;
+      for (let count = 1; count < 100; count++) {
+        let text;
         if (count % fizzNum == 0 && count % buzzNum == 0) {
           text = document.createTextNode("FizzBuzz " + count);
-          addDiv.appendChild(text);
-          addDiv.appendChild( document.createElement( 'br' ) );
         } else if (count % fizzNum == 0) {
           text = document.createTextNode("Fizz " + count);
-          addDiv.appendChild(text);
-          addDiv.appendChild( document.createElement( 'br' ) );
         } else if (count % buzzNum == 0) {
           text = document.createTextNode("Buzz " + count);
+        }
+
+        <!-- textに設定がある場合、結果出力 -->
+        if (text != undefined) {
           addDiv.appendChild(text);
           addDiv.appendChild( document.createElement( 'br' ) );
         }
-        count++;
       }
     }
 
