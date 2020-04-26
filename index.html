@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta content="ja_JP">
+    <title>JavaScript課題②</title>
+  </head>
+  <body>
+    <h1 name="title">JavaScript課題②</h1>
+    <div class="numBox">
+      <h3>【入力部】</h3>
+      FizzNum:
+      <input id="fizzNum" type="text">
+      <br>
+      BuzzNum:
+      <input id="buzzNum" type="buzzNum">
+      <br>
+      <input id="doFizzBuzz" type="button" value="実行">
+    </div>
+    <h3>【実行結果】</h3>
+    <div id="outputArea"></div>
+  </body>
+
+  <script>
+    <!-- 取得するボタン -->
+    const fizzBuzzBtn = document.getElementById('doFizzBuzz');
+
+    <!-- 追加先の要素を指定する -->
+      const addDiv = document.getElementById("outputArea");
+
+    <!-- ボタン押下動作 -->
+    fizzBuzzBtn.addEventListener('click', function() {
+      const fizzNum = document.getElementById("fizzNum").value;
+      const buzzNum = document.getElementById("buzzNum").value;
+
+
+      <!-- 前回の実行結果がある場合、削除する -->
+      if (addDiv.hasChildNodes()){
+        DeleteOutputArea(addDiv);
+      }
+
+      <!-- 入力判定(エラーの場合、errTextを設定する) -->
+      let errText;
+      if (fizzNum.trim() == "") {
+        errText = document.createTextNode("FizzNumが空欄です");
+      } else if(buzzNum.trim() == ""){
+        errText = document.createTextNode("BuzzNumが空欄です");
+      } else if(fizzNum == 0 || buzzNum == 0){
+        errText = document.createTextNode("0が入力されているので、他の値を設定してください");
+      } else if(!isNaN(fizzNum) && !isNaN(buzzNum)){
+        DrawOutputArea(addDiv, fizzNum, buzzNum);
+      } else {
+        errText = document.createTextNode("文字列が入力されています");
+      }
+
+      <!-- errTextに設定がある場合、結果出力 -->
+      if (errText) {
+        addDiv.appendChild(errText);
+      }
+    }, false);
+
+    <!-- 実効結果出力(正常系) -->
+    function DrawOutputArea(addDiv, fizzNum, buzzNum) {
+      for (let count = 1; count < 100; count++) {
+        let text;
+        if (count % fizzNum == 0 && count % buzzNum == 0) {
+          text = document.createTextNode("FizzBuzz " + count);
+        } else if (count % fizzNum == 0) {
+          text = document.createTextNode("Fizz " + count);
+        } else if (count % buzzNum == 0) {
+          text = document.createTextNode("Buzz " + count);
+        }
+
+        <!-- textに設定がある場合、結果出力 -->
+        if (text) {
+          addDiv.appendChild(text);
+          addDiv.appendChild( document.createElement( 'br' ) );
+        }
+      }
+    }
+
+    <!-- 実行結果を削除する -->
+    function DeleteOutputArea(addDiv) {
+      for (let i = addDiv.childNodes.length-1; i >= 0; i--) {
+        addDiv.removeChild(addDiv.childNodes[i]);
+      }
+    }
+  </script>
+</html>
